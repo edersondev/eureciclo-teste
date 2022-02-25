@@ -194,3 +194,13 @@ _:-ms-input-placeholder, :root .demo-graph {
       -ms-flex-align: center;
           align-items: center;
 }
+
+.title .mat-icon {
+  position: relative;
+  top: 5px;
+  margin-right: 10px;
+}
+
+app-sync {
+  width: 100%;
+}
