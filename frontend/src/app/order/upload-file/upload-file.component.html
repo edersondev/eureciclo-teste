@@ -6,7 +6,11 @@
 </div>
 
 <div *ngIf="hasError" fxLayout="row" fxLayoutAlign="center">
-  <div class="error-upload">Arquivo inválido, selecione arquivos csv ou txt</div>
+  <div class="error-message">Arquivo inválido, selecione arquivos csv ou txt</div>
 </div>
 
-<app-csv-parser [hidden]="hiddenParserResult" [fileToParser]="file"></app-csv-parser>
+<div *ngIf="proccessData.message != ''" fxLayout="row" fxLayoutAlign="center">
+  <div [ngClass]="{'error-message': !proccessData.status,'success-message': proccessData.status}">{{proccessData.message}}</div>
+</div>
+
+<app-csv-parser [hidden]="hiddenParserResult" [fileToParser]="file" (successProccessData)="getProccessData($event)"></app-csv-parser>

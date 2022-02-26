@@ -1,6 +1,8 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { Papa } from 'ngx-papaparse';
+import { ProccessDataModel } from '../model/proccess-data.model';
+
 
 @Component({
   selector: 'app-csv-parser',
@@ -10,6 +12,7 @@ import { Papa } from 'ngx-papaparse';
 export class CsvParserComponent implements OnInit, OnChanges {
 
   @Input() fileToParser:File | null = null;
+  @Output() successProccessData: EventEmitter<ProccessDataModel> = new EventEmitter();
 
   displayedColumns: string[] = [];
   dataSource:MatTableDataSource<any> = new MatTableDataSource();
@@ -31,6 +34,11 @@ export class CsvParserComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     
+  }
+
+  processData(): void {
+    this.successProccessData.emit({status:true,message:"Dados processados com sucesso!"});
+    // this.successProccessData.emit({status:false,message:"Erro ao processar dados!"});
   }
 
 }

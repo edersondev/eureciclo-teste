@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { ProccessDataModel } from '../model/proccess-data.model';
 
 @Component({
   selector: 'app-upload-file',
@@ -12,6 +13,7 @@ export class UploadFileComponent implements OnInit {
   file:File | null = null;
   hiddenParserResult:boolean = true;
   inputUpload:FormControl = new FormControl(null);
+  proccessData:ProccessDataModel = {status:false,message:""};
 
   constructor() { }
 
@@ -23,6 +25,7 @@ export class UploadFileComponent implements OnInit {
     this.file = null;
     this.hiddenParserResult = true;
     this.inputUpload.reset();
+    this.proccessData = {status:false,message:""};
     input.click();
   }
 
@@ -36,6 +39,10 @@ export class UploadFileComponent implements OnInit {
     } else {
       this.hiddenParserResult = false;
     }
+  }
+
+  getProccessData($event:ProccessDataModel): void {
+    this.proccessData = $event;
   }
 
 }

@@ -1,5 +1,10 @@
-.error-upload {
+.error-message {
   margin-top: 20px;
   font-weight: bold;
   color: red;
+}
+.success-message {
+  margin-top: 20px;
+  font-weight: bold;
+  color: blue;
 }
