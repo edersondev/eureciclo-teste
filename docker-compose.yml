@@ -1,0 +1,39 @@
+version: '3'
+services:
+  dbpsql:
+    image: postgres:14.1-alpine
+    ports:
+      - "5432:5432"
+    volumes:
+      - eureciclodb:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+    restart: unless-stopped
+  
+  webphp:
+    build: docker_images/backend
+    image: eureciclo/laravel:9
+    ports:
+      - "80:80"
+    depends_on:
+      - dbpsql
+    volumes:
+      - ./backend:/var/www/html
+    networks:
+      default:
+        aliases:
+          - ${SERVERNAME_REST}
+    environment:
+      DB_CONNECTION: ${DB_CONNECTION}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      SERVER_NAME: ${SERVERNAME_REST}
+      DOCUMENT_ROOT: public
+    restart: unless-stopped
+volumes:
+  eureciclodb:
