@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-upload-file',
@@ -9,6 +10,8 @@ export class UploadFileComponent implements OnInit {
 
   hasError:boolean = false;
   file:File | null = null;
+  hiddenParserResult:boolean = true;
+  inputUpload:FormControl = new FormControl(null);
 
   constructor() { }
 
@@ -18,6 +21,8 @@ export class UploadFileComponent implements OnInit {
   eventClickUpload(input:HTMLInputElement) {
     this.hasError = false;
     this.file = null;
+    this.hiddenParserResult = true;
+    this.inputUpload.reset();
     input.click();
   }
 
@@ -28,6 +33,8 @@ export class UploadFileComponent implements OnInit {
     
     if(this.file?.type != "text/plain") {
       this.hasError = true;
+    } else {
+      this.hiddenParserResult = false;
     }
   }
 

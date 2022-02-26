@@ -6,6 +6,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { UploadFileComponent } from './upload-file/upload-file.component';
 import { MatButtonModule } from '@angular/material/button';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { CsvParserComponent } from './csv-parser/csv-parser.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatTableModule } from '@angular/material/table';
 
 const routes:Routes = [
   {
@@ -17,14 +20,17 @@ const routes:Routes = [
 @NgModule({
   declarations: [
     SyncComponent,
-    UploadFileComponent
+    UploadFileComponent,
+    CsvParserComponent
   ],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
     MatIconModule,
     MatButtonModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    ReactiveFormsModule,
+    MatTableModule
   ]
 })
 export class OrderModule { }

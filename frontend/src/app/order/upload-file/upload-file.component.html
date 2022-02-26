@@ -2,9 +2,11 @@
     <button type="button" mat-raised-button color="primary" (click)="eventClickUpload(fileUpload)">
       <mat-icon aria-hidden="false">upload</mat-icon> Clique aqui para procurar o arquivo
     </button>
-    <input hidden type="file" accept="text/plain" (change)="onFileSelected($event)" #fileUpload>
+    <input hidden [formControl]="inputUpload" type="file" accept="text/plain" (change)="onFileSelected($event)" #fileUpload>
 </div>
 
 <div *ngIf="hasError" fxLayout="row" fxLayoutAlign="center">
   <div class="error-upload">Arquivo inválido, selecione arquivos csv ou txt</div>
 </div>
+
+<app-csv-parser [hidden]="hiddenParserResult" [fileToParser]="file"></app-csv-parser>
