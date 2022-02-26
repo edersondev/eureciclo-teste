@@ -2,12 +2,11 @@
 
 namespace App\Http\Service;
 
+use App\Http\Services\Service;
 use App\Repository\OrderRepository;
 
-class OrderService
+class OrderService extends Service
 {
-  protected $repository;
-
   public function __construct(OrderRepository $repository)
   {
     $this->repository = $repository;

@@ -25,10 +25,10 @@ class SyncOrderService
     $arrayFromCsv = array_map(function($v){return str_getcsv($v, "\t");}, file($fullPath));
 
     $header = array_map(function($v){
-      return Str::slug($v);
+      return Str::slug($v,"_");
     },array_shift($arrayFromCsv));
 
-    return array_map(function($v) use ($header) {
+    return array_map(function($v) use ($header){
       return array_combine($header,$v);
     },$arrayFromCsv);
 
