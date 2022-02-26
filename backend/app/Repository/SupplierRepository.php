@@ -4,10 +4,8 @@ namespace App\Repository;
 
 use App\Models\Supplier;
 
-class SupplierRepository
+class SupplierRepository extends Repository
 {
-  protected $entity;
-
   public function __construct(Supplier $entity)
   {
     $this->entity = $entity;
