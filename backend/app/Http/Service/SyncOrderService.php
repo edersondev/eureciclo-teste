@@ -48,6 +48,7 @@ class SyncOrderService
 
   private function storeData($arrayData)
   {
+    $this->validateCsvContent($arrayData);
     $storeCount = ['errors' => 0,'success' => 0];
     foreach($arrayData as $line => $data) {
       try {
@@ -59,6 +60,17 @@ class SyncOrderService
       }
     }
     return $storeCount;
+  }
+
+  private function validateCsvContent($arrayData)
+  {
+    $messageError = "Arquivo com formato inválido ou vazio";
+    if(empty($arrayData)) {
+      throw new \Exception($messageError);
+    }
+    if(is_array($arrayData) && count($arrayData[0]) != 6) {
+      throw new \Exception($messageError);
+    }
   }
 
   private function validateRow($line, $rowData)
