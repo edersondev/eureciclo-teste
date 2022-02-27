@@ -5,6 +5,7 @@ namespace App\Http\Service;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 
 class SyncOrderService
 {
@@ -29,7 +30,9 @@ class SyncOrderService
     $path = $request->file('ordercsv')->store('sync_orders');
     
     $arrayData = $this->convertCsvToArray($path);
-    return $this->storeData($arrayData);
+    $resultDataStore = $this->storeData($arrayData);
+    Storage::delete($path);
+    return $resultDataStore;
   }
 
   private function convertCsvToArray($path)
