@@ -18,7 +18,6 @@ class SyncOrderController extends Controller
     $request->validate([
       'ordercsv' => 'required|file|mimetypes:text/plain'
     ]);
-    $this->service->syncData($request);
-    return response()->noContent();
+    return response()->json($this->service->syncData($request));
   }
 }
