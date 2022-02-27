@@ -12,7 +12,7 @@ services:
       POSTGRES_DB: ${DB_DATABASE}
     restart: unless-stopped
   
-  webphp:
+  backend:
     build: docker_images/backend
     image: eureciclo/laravel:9
     ports:
@@ -35,5 +35,18 @@ services:
       SERVER_NAME: ${SERVERNAME_REST}
       DOCUMENT_ROOT: public
     restart: unless-stopped
+
+  frontend:
+    build: docker_images/frontend
+    image: eureciclo/angular:13
+    ports:
+      - "4200:4200"
+    depends_on:
+      - backend
+    environment:
+      URL_REST: ${SERVERNAME_REST}
+    volumes:
+      - ./frontend:/var/angular
+    command: npm run start-docker
 volumes:
   eureciclodb:
