@@ -2,7 +2,6 @@
 
 namespace App\Http\Service;
 
-use App\Http\Services\Service;
 use App\Repository\OrderRepository;
 
 class OrderService extends Service
