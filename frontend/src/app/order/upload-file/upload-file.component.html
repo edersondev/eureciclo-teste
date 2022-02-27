@@ -13,7 +13,7 @@
   <div fxLayout="row" fxLayoutAlign="center">
     <div [ngClass]="{'error-message': !proccessData.status,'success-message': proccessData.status}">{{proccessData.message}}</div>
   </div>
-  <div fxLayout="row">
+  <div *ngIf="proccessData.counter" fxLayout="row">
     <div fxFlex="50" fxLayoutAlign="center" class="result-count-success">Processados com sucesso: <strong>{{proccessData?.counter?.success}}</strong></div>
     <div fxFlex="50" fxLayoutAlign="center" class="result-count-errors">Não processados: <strong>{{proccessData?.counter?.error}}</strong></div>
   </div>
