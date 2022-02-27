@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange
 import { MatTableDataSource } from '@angular/material/table';
 import { Papa } from 'ngx-papaparse';
 import { ProccessDataModel } from '../model/proccess-data.model';
-
+import { OrderService } from '../service/order.service';
 
 @Component({
   selector: 'app-csv-parser',
@@ -17,7 +17,10 @@ export class CsvParserComponent implements OnInit, OnChanges {
   displayedColumns: string[] = [];
   dataSource:MatTableDataSource<any> = new MatTableDataSource();
 
-  constructor(private papa: Papa) { }
+  constructor(
+    private papa: Papa,
+    private _orderService: OrderService
+  ) { }
 
   ngOnChanges(changes: SimpleChanges): void {
     const file:File | null = changes['fileToParser'].currentValue;
@@ -37,8 +40,22 @@ export class CsvParserComponent implements OnInit, OnChanges {
   }
 
   processData(): void {
-    this.successProccessData.emit({status:true,message:"Dados processados com sucesso!"});
-    // this.successProccessData.emit({status:false,message:"Erro ao processar dados!"});
+    if(this.fileToParser != null){
+      const formData = new FormData();
+      formData.append("ordercsv", this.fileToParser);
+
+      this._orderService.syncOrders(formData).subscribe({
+        next: (v) => {
+          let proccessData:ProccessDataModel = {
+            status:true,
+            message:"Dados processados com sucesso!",
+            counter:{success:v.success,error:v.errors}
+          };
+          this.successProccessData.emit(proccessData)
+        },
+        error: (e) => this.successProccessData.emit({status:false,message:"Erro ao processar dados!"})
+      });
+    }
   }
 
 }

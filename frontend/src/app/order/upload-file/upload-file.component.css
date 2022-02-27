@@ -1,10 +1,22 @@
 .error-message {
-  margin-top: 20px;
   font-weight: bold;
   color: red;
 }
 .success-message {
-  margin-top: 20px;
   font-weight: bold;
   color: blue;
+}
+
+.box-result-proccess {
+  margin: 20px;
+  padding: 10px;
+  border: 1px dashed blue;
+}
+
+.box-result-proccess .result-count-success {
+  color: blue;
+}
+
+.box-result-proccess .result-count-errors {
+  color: red;
 }

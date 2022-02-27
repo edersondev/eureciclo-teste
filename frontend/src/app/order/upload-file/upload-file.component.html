@@ -9,8 +9,14 @@
   <div class="error-message">Arquivo inválido, selecione arquivos csv ou txt</div>
 </div>
 
-<div *ngIf="proccessData.message != ''" fxLayout="row" fxLayoutAlign="center">
-  <div [ngClass]="{'error-message': !proccessData.status,'success-message': proccessData.status}">{{proccessData.message}}</div>
+<div *ngIf="proccessData.message != ''" class="box-result-proccess">
+  <div fxLayout="row" fxLayoutAlign="center">
+    <div [ngClass]="{'error-message': !proccessData.status,'success-message': proccessData.status}">{{proccessData.message}}</div>
+  </div>
+  <div fxLayout="row">
+    <div fxFlex="50" fxLayoutAlign="center" class="result-count-success">Processados com sucesso: <strong>{{proccessData?.counter?.success}}</strong></div>
+    <div fxFlex="50" fxLayoutAlign="center" class="result-count-errors">Não processados: <strong>{{proccessData?.counter?.error}}</strong></div>
+  </div>
 </div>
 
 <app-csv-parser [hidden]="hiddenParserResult" [fileToParser]="file" (successProccessData)="getProccessData($event)"></app-csv-parser>
