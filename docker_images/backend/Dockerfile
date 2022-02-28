@@ -6,7 +6,8 @@ ARG PHP_VERSION=8.0
 RUN apt-get update && apt-get install -y \
     php${PHP_VERSION}-bcmath \
     php${PHP_VERSION}-curl \
-    php${PHP_VERSION}-pgsql
+    php${PHP_VERSION}-pgsql \
+    php${PHP_VERSION}-sqlite3
 
 COPY docker-entrypoint.sh /
 RUN chmod +x /docker-entrypoint.sh

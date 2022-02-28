@@ -32,5 +32,6 @@ if [ ! -f "$PATH_ROOT/.env" ]; then
 fi
 
 chown www-data.www-data -R bootstrap/ storage/
+touch database/database.sqlite
 
 exec "$@"
