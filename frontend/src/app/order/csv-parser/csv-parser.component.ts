@@ -49,7 +49,7 @@ export class CsvParserComponent implements OnInit, OnChanges {
           let proccessData:ProccessDataModel = {
             status:true,
             message:"Dados processados com sucesso!",
-            counter:{success:v.success,error:v.errors}
+            counter:{success:v.data.success,error:v.data.errors}
           };
           this.successProccessData.emit(proccessData)
         },
