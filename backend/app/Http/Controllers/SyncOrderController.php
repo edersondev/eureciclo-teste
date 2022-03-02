@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ResponseResource;
 use Illuminate\Http\Request;
 use App\Http\Service\SyncOrderService;
 
@@ -18,6 +19,6 @@ class SyncOrderController extends Controller
     $request->validate([
       'ordercsv' => 'required|file|mimetypes:text/plain'
     ]);
-    return response()->json($this->service->syncData($request));
+    return ResponseResource::make($this->service->syncData($request));
   }
 }
