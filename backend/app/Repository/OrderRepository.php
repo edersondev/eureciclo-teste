@@ -10,4 +10,13 @@ class OrderRepository extends Repository
   {
     $this->entity = $entity;
   }
+
+  /**
+   * @param \Illuminate\Http\Request $request
+   * @return \Illuminate\Database\Eloquent\Model
+   */
+  public function index($request)
+  {
+    return $this->entity::orderBy('id','desc');
+  }
 }
