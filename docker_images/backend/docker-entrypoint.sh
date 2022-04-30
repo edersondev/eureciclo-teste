@@ -3,6 +3,7 @@ set -e
 
 SITE_CONF=/etc/apache2/sites-available/000-default.conf
 PATH_ROOT=/var/www/html
+STR_TEST_ENV=testing
 
 if [ -n "$SERVER_NAME" ]; then
 	sed -i 's#$SERVER_NAME#'$SERVER_NAME'#g' $SITE_CONF
@@ -21,17 +22,24 @@ cd $PATH_ROOT
 
 if [ -f "$PATH_ROOT/composer.json" ]; then
 	if [ ! -d "$PATH_ROOT/vendor" ];then
+	    composer update
 		composer install
 	fi
 fi
 
 if [ ! -f "$PATH_ROOT/.env" ]; then
-    cp .env.example .env
-    php artisan key:generate
-    php artisan migrate
+    if [ -f "$PATH_ROOT/.env.example" ]; then
+        cp .env.example .env
+        php artisan key:generate
+    fi
 fi
 
-chown www-data.www-data -R bootstrap/ storage/
-touch database/database.sqlite
+if [ -f "$PATH_ROOT/.env" ]; then
+    if [ "$APP_ENV" != "$STR_TEST_ENV" ]; then
+        php artisan migrate
+        php artisan db:seed
+    fi
+    chown www-data.www-data -R bootstrap/ storage/
+fi
 
 exec "$@"
