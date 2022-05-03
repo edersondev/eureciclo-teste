@@ -6,6 +6,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
+use App\Exceptions\CsvContentException;
 
 class SyncOrderService
 {
@@ -23,7 +24,7 @@ class SyncOrderService
   }
 
   /**
-   * @param Illuminate\Http\Request $request
+   * @param \Illuminate\Http\Request $request
    */
   public function syncData($request)
   {
@@ -35,7 +36,7 @@ class SyncOrderService
     return $resultDataStore;
   }
 
-  private function convertCsvToArray($path)
+  public function convertCsvToArray($path)
   {
     $fullPath = storage_path("app/{$path}");
     $arrayFromCsv = array_map(function($v){return str_getcsv($v, "\t");}, file($fullPath));
@@ -49,7 +50,7 @@ class SyncOrderService
     },$arrayFromCsv);
   }
 
-  private function storeData($arrayData)
+  public function storeData($arrayData)
   {
     $this->validateCsvContent($arrayData);
     $storeCount = ['errors' => 0,'success' => 0];
@@ -65,18 +66,17 @@ class SyncOrderService
     return $storeCount;
   }
 
-  private function validateCsvContent($arrayData)
+  public function validateCsvContent($arrayData)
   {
-    $messageError = "Arquivo com formato inválido ou vazio";
     if(empty($arrayData)) {
-      throw new \Exception($messageError);
+      throw new CsvContentException("Arquivo vazio");
     }
     if(is_array($arrayData) && count($arrayData[0]) != 6) {
-      throw new \Exception($messageError);
+      throw new CsvContentException("Arquivo com formato inválido");
     }
   }
 
-  private function validateRow($line, $rowData)
+  public function validateRow($line, $rowData)
   {
     $ruleString = 'required|string|max:255';
     $validator = Validator::make($rowData, [
@@ -95,21 +95,21 @@ class SyncOrderService
     }
   }
 
-  private function storeCustomer($data)
+  public function storeCustomer($data)
   {
     $request = new Request();
     $request->merge(['name' => $data['comprador']]);
     return $this->customerService->store($request);
   }
 
-  private function storeSupplier($data)
+  public function storeSupplier($data)
   {
     $request = new Request();
     $request->merge(['name' => $data['fornecedor']]);
     return $this->supplierService->store($request);
   }
 
-  private function storeOrder($data)
+  public function storeOrder($data)
   {
     $customer = $this->storeCustomer($data);
     $supplier = $this->storeSupplier($data);
