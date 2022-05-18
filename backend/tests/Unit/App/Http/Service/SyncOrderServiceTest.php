@@ -17,9 +17,29 @@ class SyncOrderServiceTest extends TestCase
 {
     protected $_service;
 
+    /**
+     * @var \App\Http\Service\CustomerService&\PHPUnit\Framework\MockObject\MockObject
+     */
     protected $_customerService;
+
+    /**
+     * @var \App\Http\Service\SupplierService&\PHPUnit\Framework\MockObject\MockObject
+     */
     protected $_supplierService;
+
+    /**
+     * @var \App\Http\Service\OrderService&\PHPUnit\Framework\MockObject\MockObject
+     */
     protected $_orderService;
+
+    protected $_dumpData = [
+        'comprador' => 'João Silva',
+        'descricao' => 'R$10 off R$20 of food',
+        'preco_unitario' => 10.0,
+        'quantidade' => 2,
+        'endereco' => '987 Fake St',
+        'fornecedor' => 'Bob\'s pizza'
+    ];
 
     public function setUp(): void
     {
@@ -65,6 +85,65 @@ class SyncOrderServiceTest extends TestCase
         $this->expectException(CsvContentException::class);
         $this->expectExceptionMessage($exceptionMessage);
         $this->_service->validateCsvContent($arrData);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function whenValidateRowFailsThenReturnException()
+    {
+        $this->dumbData['comprador'] = '';
+
+        $this->expectException(CsvContentException::class);
+
+        $this->_service->validateRow(1,$this->dumbData);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function whenStoreOrderThenReturnSuccess()
+    {
+        $customer = new \App\Models\Customer();
+        $customer->id = 1;
+        $customer->name = $this->_dumpData['comprador'];
+        $this->_customerService->method('store')->willReturn($customer);
+
+        $supplier = new \App\Models\Supplier();
+        $supplier->id = 1;
+        $supplier->name = $this->_dumpData['fornecedor'];
+        $this->_supplierService->method('store')->willReturn($supplier);
+
+        $order = new \App\Models\Order();
+        $order->id = 1;
+        $order->customer_id = $customer->id;
+        $order->supplier_id = $supplier->id;
+        $order->description = $this->_dumpData['descricao'];
+        $order->unit_price = $this->_dumpData['preco_unitario'];
+        $order->quantity = $this->_dumpData['quantidade'];
+        $order->address = $this->_dumpData['endereco'];
+
+        $this->_orderService->method('store')->willReturn($order);
+
+        $result = $this->_service->storeOrder($this->_dumpData);
+
+        $expectResult = [
+            "id" => 1,
+            "customer_id" => 1,
+            "supplier_id" => 1,
+            "description" => "R$10 off R$20 of food",
+            "unit_price" => 10.0,
+            "quantity" => 2,
+            "address" => "987 Fake St"
+        ];
+
+        $this->assertNotEmpty($result);
+        $this->assertInstanceOf(\App\Models\Customer::class,$customer);
+        $this->assertInstanceOf(\App\Models\Supplier::class,$supplier);
+        $this->assertInstanceOf(\App\Models\Order::class,$result);
+        $this->assertEquals($expectResult,$result->toArray());
     }
 
     /**
