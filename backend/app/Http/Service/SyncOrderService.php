@@ -91,18 +91,18 @@ class SyncOrderService
     if ($validator->fails()) {
       $firstError = $validator->errors()->first();
       $lineOnCsvFile = $line + 2;
-      throw new \Exception("Error on line {$lineOnCsvFile}: {$firstError}");
+      throw new CsvContentException("Error on line {$lineOnCsvFile}: {$firstError}");
     }
   }
 
-  public function storeCustomer($data)
+  private function storeCustomer($data)
   {
     $request = new Request();
     $request->merge(['name' => $data['comprador']]);
     return $this->customerService->store($request);
   }
 
-  public function storeSupplier($data)
+  private function storeSupplier($data)
   {
     $request = new Request();
     $request->merge(['name' => $data['fornecedor']]);
